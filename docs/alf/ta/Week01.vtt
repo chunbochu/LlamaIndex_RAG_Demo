@@ -1,0 +1,1745 @@
+WEBVTT
+
+1
+00:00:04.540 --> 00:00:06.620
+Tim Kington: Hi, everyone! How's it going tonight?
+
+2
+00:00:08.440 --> 00:00:09.860
+Johnny Jones: Doing well, how you doing.
+
+3
+00:00:09.980 --> 00:00:10.879
+Thomas Stein: Pretty well.
+
+4
+00:00:12.120 --> 00:00:15.443
+Tim Kington: Doing pretty well. I had a good coding day today I had
+
+5
+00:00:16.149 --> 00:00:21.450
+Tim Kington: some code that had a bad design. I could just tell there's something wrong with it, and I was having trouble
+
+6
+00:00:21.660 --> 00:00:27.599
+Tim Kington: pinning it down, and then toward the end of the day I I figured out a way to clean it up. So that's always nice.
+
+7
+00:00:30.460 --> 00:00:32.360
+Tim Kington: Welcome to Comp. 6, 11.
+
+8
+00:00:32.945 --> 00:00:35.419
+Tim Kington: We're gonna cover a whole bunch of stuff here.
+
+9
+00:00:35.890 --> 00:00:42.370
+Tim Kington: There is a link to the Ed discussions in canvas on the left side, and if you haven't found that yet, you should follow that
+
+10
+00:00:42.540 --> 00:00:44.690
+Tim Kington: there's a bunch of useful information there
+
+11
+00:00:45.202 --> 00:00:51.370
+Tim Kington: and an introduction thread where everyone should introduce themselves. I will do that. Here. Live as well.
+
+12
+00:00:52.211 --> 00:00:57.179
+Tim Kington: My name is Tim Kington, and I've been a developer for a long time now
+
+13
+00:00:57.320 --> 00:01:00.499
+Tim Kington: I've also been teaching at Franklin since 2,003.
+
+14
+00:01:02.070 --> 00:01:13.790
+Tim Kington: I've written a lot of code in the big popular languages. So I spent about 5 years doing industrial control stuff in C plus plus and then about 7 doing enterprisey Java work.
+
+15
+00:01:14.060 --> 00:01:19.120
+Tim Kington: another 7 doing industrial control again. But this time in C sharp and Java.
+
+16
+00:01:19.370 --> 00:01:41.239
+Tim Kington: and then I went to Fog Creek, which became glitch and did a bunch of C sharp and javascript, and built the infrastructure for glitch there and then. Lately I've been working at tanium doing computer security software. And that's written mostly in Go, and I do some c plus plus and a little bit of python as well. So lots of applicable experience.
+
+17
+00:01:41.520 --> 00:02:06.099
+Tim Kington: And then at Franklin I've taught all of the main sequence. Java courses many times. That's what I normally teach. Comp. 3, 11, which is sort of similar to this course. Advanced data structures to the undergraduates, and then this course are the 2 that I teach most of the time. I've also taught some python, some php, a little bit of Javascript the distributed systems graduate course once or twice. So
+
+18
+00:02:06.474 --> 00:02:14.139
+Tim Kington: a bunch of those things. So I'm real familiar with the main sequence Java courses, and a little less familiar with the rest of the courses we have here.
+
+19
+00:02:15.730 --> 00:02:18.550
+Tim Kington: Let's go ahead and dive in. Here.
+
+20
+00:02:19.640 --> 00:02:21.299
+Tim Kington: Are you seeing the slides.
+
+21
+00:02:24.160 --> 00:02:24.510
+Johnny Jones: Yeah.
+
+22
+00:02:25.950 --> 00:02:26.770
+Tim Kington: Right?
+
+23
+00:02:28.460 --> 00:02:37.940
+Tim Kington: So this is advanced data structures and programming. And we're going to be doing nonlinear data structures, recursion advanced sorting algorithms.
+
+24
+00:02:38.170 --> 00:02:44.300
+Tim Kington: And we're going to be focused on design along the way and also using Github for our projects.
+
+25
+00:02:44.850 --> 00:02:49.850
+Tim Kington: So it's gonna be a great course. I'm I'm always very excited about this course.
+
+26
+00:02:50.270 --> 00:03:00.799
+Tim Kington: I feel like, here we learn the sort of core of computer science. You know, this is the stuff that is most important and that never changes. This is all really fundamental stuff.
+
+27
+00:03:01.500 --> 00:03:07.229
+Tim Kington: Github obviously, is a thing that changed. But I'm not sure it'll change again. It seems to have taken over the world.
+
+28
+00:03:07.920 --> 00:03:13.980
+Tim Kington: So we're going to implement new sets. We'll talk about Hashing, and we'll build a hash table eventually.
+
+29
+00:03:14.140 --> 00:03:21.659
+Tim Kington: We're going to talk about maps, how they work implement those based on hash tables and on trees.
+
+30
+00:03:21.880 --> 00:03:29.980
+Tim Kington: We're going to talk about recursion. We'll work with some recursive algorithms. And we'll be using recursion with our data structures. Fairly often
+
+31
+00:03:30.220 --> 00:03:44.030
+Tim Kington: we're going. We're going to talk about binary trees, both binary search trees and also heaps. And then in the projects we'll be doing this semester. We're going to be working with other kinds of trees. 1st trees, basically abstract syntax trees.
+
+32
+00:03:44.290 --> 00:03:48.180
+Tim Kington: We'll talk about graphs and graph algorithms toward the end of the semester
+
+33
+00:03:48.300 --> 00:03:56.119
+Tim Kington: and also balance search trees. And we'll spend a week on advanced sorting algorithms. So we're going to hit on a lot of really important topics
+
+34
+00:03:56.720 --> 00:04:04.309
+Tim Kington: along the way. We're going to be using a bunch of design patterns. So we'll be looking at at least adapter Singleton, visitor, composite and iterator.
+
+35
+00:04:04.450 --> 00:04:21.610
+Tim Kington: And our big goal here is really number 10, right? When you're writing software, you want to be able to select the best data structure to solve the problem that you're working on. This is actually the hard part. Once you have a lot of experience. So in the in the caching service that I work on by day.
+
+36
+00:04:23.310 --> 00:04:40.480
+Tim Kington: the data structure is kind of the key to the whole thing. You know, we we need to be able to run queries against a huge amount of data. And the way that we have the data structure built in memory makes the queries run fast, and we did not get it right on the 1st try. This is the 3rd or 4th iteration of the way the data is set up
+
+37
+00:04:40.700 --> 00:04:44.230
+Tim Kington: and the queries just keep getting faster and faster.
+
+38
+00:04:47.900 --> 00:04:54.980
+Tim Kington: Alright academic integrity. So this is a problem that comes up occasionally in this course. You do not want this to come up for you
+
+39
+00:04:55.528 --> 00:05:04.459
+Tim Kington: you need to do your own work in this course. Right? You can get inspiration from code on the web if you find some code and you cite it.
+
+40
+00:05:04.570 --> 00:05:13.889
+Tim Kington: and you also understand the code as if you had written it yourself. So if you turn it in, and I don't think you understand it, I will call you up and ask you about it.
+
+41
+00:05:14.200 --> 00:05:22.910
+Tim Kington: And if you don't really understand how it works, then that counts as plagiarism, right? So don't do that. You're really short changing yourself. Right? You're going to
+
+42
+00:05:23.280 --> 00:05:28.280
+Tim Kington: come out of the course without being able to write code right? If you're trying to copy someone else's code.
+
+43
+00:05:28.430 --> 00:05:29.240
+Tim Kington: There's
+
+44
+00:05:29.540 --> 00:05:50.640
+Tim Kington: there are different levels to being able to code, being able to read code and understand. It is one thing being able to write. Your own code is an entirely different thing. People are often surprised by that. But really, if you think about writing, it's sort of the same way you all have read many books right? You don't have any trouble reading books, but writing a book would be a different challenge.
+
+45
+00:05:50.860 --> 00:05:55.780
+Tim Kington: It's the same way with code just because you can read and understand. Code does not mean you can write your own.
+
+46
+00:05:56.030 --> 00:06:19.828
+Tim Kington: So that's something you need to practice. And trying to take shortcuts is really going to hurt you in the long run. I know that people are saying that AI will be able to write all your code for you. But that's really not true. Chat Gpt could help you quite a bit with your code, but it doesn't really understand a larger project. So that's the that's the big problem. There is.
+
+47
+00:06:20.240 --> 00:06:33.190
+Tim Kington: most of the tests and examples, you'll see, are very small, well-defined problems, and ais do very well with those. But if you were working on the code I'm working on by day, you're looking at like half a million lines of code. And
+
+48
+00:06:33.669 --> 00:06:50.459
+Tim Kington: so far, AI is not able to absorb that and really understand what's going on in it. Right? We still need developers that can understand what's going on, how different parts of the system relate to each other where the Gotchas are. And if you can't write your own code, then you're not going to be able to understand that
+
+49
+00:06:51.970 --> 00:06:58.670
+Tim Kington: other students are not a valid source for your code. If you're sharing code with other people, that is plagiarism, right?
+
+50
+00:06:59.295 --> 00:07:04.049
+Tim Kington: Some things you might consider doing, discussing concepts. Great. I'm all for that
+
+51
+00:07:04.230 --> 00:07:11.150
+Tim Kington: sharing partial source code solutions. Absolutely not emailing. A link used as an inspiration is kind of a gray area.
+
+52
+00:07:11.440 --> 00:07:19.250
+Tim Kington: Talking about an exam you took before someone else is cheating. It's a different charge, but it's still going to make you fail. The course.
+
+53
+00:07:19.783 --> 00:07:36.139
+Tim Kington: Discussing algorithms that will help with assignments. That's great. Sharing insights about testing and corner cases. Go for it. Putting assignments up for bid on rent to code are obviously not okay. Copying and pasting source code. Clearly not allowed sharing pseudo code solutions. So at this level.
+
+54
+00:07:36.603 --> 00:07:44.519
+Tim Kington: really, the syntax of Java is not your main problem. Your main problem is figuring out how to attack the problem and breaking it down into steps.
+
+55
+00:07:44.995 --> 00:07:51.039
+Tim Kington: And pseudocode really does that so sharing pseudocode is just as bad as sharing actual Java code
+
+56
+00:07:51.210 --> 00:07:59.745
+Tim Kington: and then posting help requests on a non Franklin mailing list or bulletin board that is also not allowed. All right. So stack, overflow, or that kind of thing.
+
+57
+00:08:00.200 --> 00:08:03.510
+Tim Kington: post your questions here on Ed, and they will be answered.
+
+58
+00:08:05.050 --> 00:08:13.800
+Tim Kington: If you have a feeling you wouldn't want me knowing what you're doing. You probably shouldn't be doing it. If you have any questions. Of course I'm here to clear things up for you.
+
+59
+00:08:14.960 --> 00:08:21.480
+Tim Kington: We are going to have 10 homework assignments. These will be smaller problems every week worth 25 points.
+
+60
+00:08:21.600 --> 00:08:26.020
+Tim Kington: And then we'll have a project assignment basically every week.
+
+61
+00:08:26.780 --> 00:08:28.590
+Tim Kington: and those are worth 35 points.
+
+62
+00:08:29.080 --> 00:08:36.250
+Tim Kington: And then we have 2 exams, and it all adds up to a nice, even 1,000 points. So it's easy to tell what your target score is.
+
+63
+00:08:38.799 --> 00:08:47.190
+Tim Kington: We're going to have a late submission penalty. This is the same across Franklin, although I've heard that some people make exceptions. We're not supposed to do that.
+
+64
+00:08:47.756 --> 00:08:54.619
+Tim Kington: Assignments can be turned in up to 3 days, late, 10% penalty per day, and after 3 days late. You can't receive credit.
+
+65
+00:08:57.750 --> 00:09:01.029
+Tim Kington: so each week you'll want to check the discussions on Ed
+
+66
+00:09:01.230 --> 00:09:06.870
+Tim Kington: before class. You should do the assigned reading, and at least take a look at the homework and think about it a little bit.
+
+67
+00:09:07.330 --> 00:09:10.780
+Tim Kington: and then, after class work on the homework work on the project.
+
+68
+00:09:10.960 --> 00:09:22.319
+Tim Kington: and there will be a weekly reflection question on the homework. That sort of is intended to help you gather your thoughts and sort of put everything into a framework so that it fits together and sticks better in your mind.
+
+69
+00:09:25.160 --> 00:09:30.844
+Tim Kington: We'll be using ed discussions we're not going to use canvas for really anything in this course.
+
+70
+00:09:31.260 --> 00:09:37.400
+Tim Kington: Due dates on canvas are not accurate. Ed is where the due dates are. The assignments are all submitted through. Ed.
+
+71
+00:09:37.793 --> 00:09:48.929
+Tim Kington: The tests are taken on Ed. Everything is in Ed. Okay, the discussion boards are in, Ed. I will not see your questions if you post them on canvas, so don't do that put them in. Ed.
+
+72
+00:09:49.680 --> 00:09:57.180
+Tim Kington: You should ask lots of questions. There is a pretty strong correlation between the number of questions students ask and how well they do in the course
+
+73
+00:09:57.360 --> 00:10:10.039
+Tim Kington: you may feel like other people are not asking a lot of questions, but that's not necessarily true. There are private questions, and some students tend to use those. So I see a lot more questions in the discussion boards than you do.
+
+74
+00:10:10.650 --> 00:10:19.760
+Tim Kington: You should consider other students post required reading. So if I've answered a question for one student in a public thread, I expect that everyone else has seen that answer.
+
+75
+00:10:19.980 --> 00:10:33.469
+Tim Kington: There are 3 types of questions on, Ed. We have public, private and anonymous questions. Anonymous questions are handy. If you are a little embarrassed, maybe you're afraid you're asking a stupid question. Just make it anonymous, and no one will know who's asking the question
+
+76
+00:10:33.877 --> 00:10:45.730
+Tim Kington: private questions are for anything specific to you like. If you wanted to. You know you needed to reschedule an exam. Or if you want to ask a question that's going to include a chunk of your source code, please use the private questions for that.
+
+77
+00:10:46.635 --> 00:11:00.690
+Tim Kington: I will give you hints rather than solutions most of the time. That's because I'm trying to help you learn how to solve your own problems right in the long run. We want you to be able to think in the right way to find the problems and figure them out. And so I
+
+78
+00:11:01.090 --> 00:11:12.429
+Tim Kington: won't just tell you what's wrong with your code necessarily. But I'll help you focus on the right things, or maybe tell you if you seem to be misunderstanding. How how a solution is supposed to work that kind of thing.
+
+79
+00:11:13.030 --> 00:11:30.919
+Tim Kington: If my hint is not enough to get you there, think about it for a while, and then come back and ask again. Okay, I'm not being coy. Just because I mean, I'm doing it to try to help you think along the right lines and learn to figure things out. But if my hint wasn't good enough, come back and ask again, and I'll give you a bigger hint
+
+80
+00:11:33.019 --> 00:11:42.250
+Tim Kington: we also have office hours on Sunday morning. So please attend those. If you need help. You can get a lot done in those sessions.
+
+81
+00:11:44.270 --> 00:11:47.250
+Tim Kington: and stop me with questions anytime. Please feel free.
+
+82
+00:11:48.440 --> 00:11:59.340
+Tim Kington: Where are we right now? Well, the hard part of programming which you may or may not have realized at this point is not really the coding right. Once you learn the Java syntax, and you have that down.
+
+83
+00:11:59.490 --> 00:12:05.320
+Tim Kington: The writing of the code is not really the hard part. The hard part is figuring out how you're going to solve the problem.
+
+84
+00:12:05.740 --> 00:12:10.539
+Tim Kington: So typically, what will be happening is, you're working on a homework or a project assignment.
+
+85
+00:12:10.680 --> 00:12:29.459
+Tim Kington: and you have a test failure that you're seeing right. Usually it's my tests that are failing. And you're trying to figure out why. Now, a lot of students will start making changes to the code or guessing and trying to figure out what my test is complaining about and try to fix it that way. But really, that's not the most efficient use of your time.
+
+86
+00:12:29.660 --> 00:12:39.400
+Tim Kington: The best use of your time is to look closely at the test failure. You will normally see a hint message. You will also see the name of the test that's failing, which is a clue.
+
+87
+00:12:39.650 --> 00:13:07.930
+Tim Kington: and if you expand the details you will also see a stack trace of where it's happening. Sometimes that's helpful. Sometimes it's not, but with those clues. You can make a theory about what part of your assignment is not working correctly, and then you can try to write a unit test for that part of your assignment. If you can write a unit test and it fails. So the code actually does the wrong thing, then you're in great shape. Once you have a failing unit test, you are going to be able to track down the problem.
+
+88
+00:13:08.160 --> 00:13:17.389
+Tim Kington: So at that point you can debug the problem. Now, bullet one. Here is the hard part come up with a clear picture of exactly what you expected the code to do
+
+89
+00:13:17.490 --> 00:13:36.110
+Tim Kington: right now. You may have a sort of vague idea of what you expected your code to do. As you get more experience and get better. At this you will have a crystal, clear picture of what you thought was going to happen all right. Once you have that, it's very easy to debug code when you have a failing unit test because you can step through the code and watch what actually happens.
+
+90
+00:13:36.110 --> 00:13:53.480
+Tim Kington: And at some point it will do something you don't expect right. You had in your mind what you thought was gonna happen. And you get to a certain line and it goes off the rails. And you're like, wait, what was that? That's where the bug is right. So if you can get to that point where you're picturing it in enough detail, it will be very easy to find the problem.
+
+91
+00:13:56.440 --> 00:14:04.080
+Tim Kington: So up to this point, we've been writing code to fill in existing methods and classes. We've been doing a little refactoring moving methods into base classes.
+
+92
+00:14:04.300 --> 00:14:12.370
+Tim Kington: You probably have been relying on Ed to point out problems. You might be using print line to debug. You might be solving problems by guessing at what's wrong.
+
+93
+00:14:14.080 --> 00:14:20.640
+Tim Kington: We would like to be in a state where we're writing new methods and writing new classes. We're going to get a lot of practice with that this semester.
+
+94
+00:14:21.073 --> 00:14:36.049
+Tim Kington: We're we want to be using the debugger to find problems. So you want to get comfortable with a real ide I recommend eclipse or Vs code intellij is also nice, but isn't free. In general. It's free for students. So you can go grab that if you want
+
+95
+00:14:36.449 --> 00:14:41.270
+Tim Kington: I'm not too familiar with Intellij, though, so if you run into trouble I won't be able to help as much.
+
+96
+00:14:43.200 --> 00:14:47.639
+Tim Kington: In a real ide like that you have a powerful debugger, and it can save you a lot of time.
+
+97
+00:14:47.920 --> 00:14:54.350
+Tim Kington: I really recommend that you do your coding in an ide and then you move it to Ed for the last parts of the development.
+
+98
+00:14:55.230 --> 00:15:16.770
+Tim Kington: We want to be able to start from a blank page right? Eventually, when you're out of school working. You will not be given starter code to work from. You still will, as a junior developer for a while, right? There will be an existing application, and you'll be going in to try to fix things that already exist and just changing existing code. But eventually you'd like to be able to start from, you know, just an empty editor and create something out of nothing.
+
+99
+00:15:17.760 --> 00:15:30.250
+Tim Kington: and you will eventually be working without instructor tests. So I know you all hate the instructor tests because they're always failing. But it's actually nicer to have them than not. I would love to have instructor tests in my day job.
+
+100
+00:15:30.702 --> 00:15:36.919
+Tim Kington: Instead, I have to write my own and any corner cases that I don't think of get shipped to customers as bugs.
+
+101
+00:15:37.530 --> 00:15:41.610
+Tim Kington: It's nice if someone else has already thought about all those things and points them out for you
+
+102
+00:15:44.930 --> 00:15:49.529
+Tim Kington: homework, this semester. So we have a homework assignment each week. That will be done on Ed.
+
+103
+00:15:49.710 --> 00:15:52.620
+Tim Kington: There is a reflection question each week
+
+104
+00:15:52.750 --> 00:16:03.659
+Tim Kington: that's worth 5 points. It needs to be 2 to 3 paragraphs of reflection, and you must include at least one question. I'll answer all of those questions on the discussion boards every week, and the
+
+105
+00:16:04.083 --> 00:16:08.186
+Tim Kington: questions and answers turn out to be very informative and helpful for for people. So
+
+106
+00:16:08.929 --> 00:16:17.420
+Tim Kington: please try to come up with a useful question. Don't just ask a lame question so that I don't ding you for points
+
+107
+00:16:19.560 --> 00:16:45.070
+Tim Kington: the project assignments. We're going to be building a large project over the course of the semester. We're going to spend 10. There will be 10 pieces to it, and they're all going to build on each other. So the code that is the solution to part one will be the beginning point of part 2 more or less. Usually I make some changes to the code in between the parts. So your solution to part one plus a few changes to get ready for Part 2 is kind of the starter code. For Part 2.
+
+108
+00:16:45.330 --> 00:16:50.180
+Tim Kington: We're going to be building a Vm. And compiler for a small Java like language.
+
+109
+00:16:50.400 --> 00:16:56.090
+Tim Kington: and we're gonna get it done in 10 assignments. It's really cool, and it's
+
+110
+00:16:56.270 --> 00:17:07.799
+Tim Kington: I'm very excited about showing you all. That there is no magic, right? It's it's easy to understand pieces of this pieces of how Java works, or your programming language or your computer works.
+
+111
+00:17:07.859 --> 00:17:29.439
+Tim Kington: And then there are always these areas that are kind of like. I have no idea how that happens. Right. The compiler might be one of those. The virtual machine might be one of those by the end of this semester you will pretty much understand how those things work. We're gonna do a very simple one. So you won't understand, you know, hardcore compiler optimizations. But you will understand the basics of what's going on inside the compiler and the virtual machines.
+
+112
+00:17:30.500 --> 00:17:36.019
+Tim Kington: I would recommend that you work on it in an ide so either eclipse or Vs code or intellij
+
+113
+00:17:36.590 --> 00:17:51.280
+Tim Kington: it will be submitted in ed stem. All of the assignments need to be submitted in Ed. When you click the Mark button, your code will be graded, and that is when I can see it. Once you've clicked mark that creates a submission that I can grade, and I will grade the last assignment
+
+114
+00:17:52.020 --> 00:17:53.240
+Tim Kington: that you submitted.
+
+115
+00:17:53.870 --> 00:18:04.830
+Tim Kington: You will need Github for this project the way I'm going to be giving you the starter code is through Github. So you need to post your username in the thread on Ed, that where I asked for that.
+
+116
+00:18:05.570 --> 00:18:17.799
+Tim Kington: and I will invite you to the project that has the instructions, and you're also going to have to create a project and then invite me as a member of that project, and I will push the starter code for each week into that project. When you are ready for
+
+117
+00:18:20.320 --> 00:18:40.769
+Tim Kington: alright, our major themes once again design patterns, test driven development. As you're getting into harder code, you're really going to be want to be writing tests before you write the solution of the code. So especially on the project assignments. In this course it's best to write tests 1st and then write code that passes the test and keep adding more and more complicated tests and writing more and more code
+
+118
+00:18:41.310 --> 00:18:49.780
+Tim Kington: recursion. We're going to be doing a bunch of nonlinear data structures. We'll be talking about algorithmic efficiency. The dreaded big O every week.
+
+119
+00:18:50.200 --> 00:18:54.840
+Tim Kington: And the goal here is to apply all of this knowledge to solving actual problems.
+
+120
+00:18:56.930 --> 00:18:58.989
+Tim Kington: All right. Any questions so far.
+
+121
+00:19:06.280 --> 00:19:07.400
+Tim Kington: Okay.
+
+122
+00:19:07.730 --> 00:19:14.159
+Tim Kington: well, this week. Our goals are to recognize and apply the adapter pattern which should be, review. Good night
+
+123
+00:19:14.600 --> 00:19:18.780
+Tim Kington: to talk about sets, and look at their common operations and properties.
+
+124
+00:19:18.880 --> 00:19:22.900
+Tim Kington: and to also figure out how to use the tools that we need in this school.
+
+125
+00:19:26.090 --> 00:19:36.149
+Tim Kington: So the adapter pattern here, we've got a piece of audio equipment and a computer, and we'd like to plug them into each other. But one speaks Rca. And the other speaks 1 8th inch.
+
+126
+00:19:36.280 --> 00:19:42.499
+Tim Kington: and so we can't just plug them in directly. We need an adapter that will convert between those 2 formats.
+
+127
+00:19:44.130 --> 00:19:47.750
+Tim Kington: This is very similar to what we do in our code with the adapter pattern.
+
+128
+00:19:48.760 --> 00:19:54.559
+Tim Kington: We might have a target class that does some work for us, and we have a client class that knows how to use it.
+
+129
+00:19:54.730 --> 00:20:06.307
+Tim Kington: And then we have another target class that does the same sort of thing as this one. And we'd like the client to be able to use either one right? So one place I've actually used this in real code is
+
+130
+00:20:06.780 --> 00:20:28.278
+Tim Kington: I worked on a bug tracker at Fog Creek that could accept issue reports via email. And so it needed to go out and get new messages from your email server. But we wanted it to work with various types of servers. Right? So we had, we had some code that could talk to a pop server, some that talk to an imap server, some Microsoft libraries that knew how to talk to outlook 365, and
+
+131
+00:20:29.010 --> 00:20:32.720
+Tim Kington: we had some client code that would go out to collect those messages. Well, we would like
+
+132
+00:20:33.010 --> 00:20:46.529
+Tim Kington: the client to be able to talk to any of those servers with the same code. Right? So what we really want is code that knows how to talk to these servers that shares a common interface, and our client class can use that interface without caring what type of server it's talking to.
+
+133
+00:20:46.880 --> 00:21:00.499
+Tim Kington: So we're in exactly this situation we had some code that knew how to talk to a pop server. I went and got a library that knew how to speak Imap, and another one that spoke Microsoft's email protocol. And I wanted to plug the client into all 3 of those things
+
+134
+00:21:02.110 --> 00:21:17.480
+Tim Kington: so we can't plug them in directly, because, even though these are doing the same things, the method names are going to be a little different. The class, the classes they use for like getting an email message or reading the data. And things like that are going to be a little bit different. So it won't work without any changes.
+
+135
+00:21:17.680 --> 00:21:20.219
+Tim Kington: So how are we going to make these things talk to each?
+
+136
+00:21:22.040 --> 00:21:25.640
+Tim Kington: Well, the 1st thing we do is separate our interface from our implementation.
+
+137
+00:21:25.980 --> 00:21:34.440
+Tim Kington: So we're going to take the methods that the client class knows about in this object, and we're going to pull them out into an interface and then say, this class implements that interface.
+
+138
+00:21:34.960 --> 00:21:48.010
+Tim Kington: and none of this code has changed right, and none of this code has changed. All we've really added is an interface between the 2. So the client class is now using a target interface object instead of a concrete target object. That's basically the only code that's changed.
+
+139
+00:21:48.190 --> 00:21:54.890
+Tim Kington: We can also do this with the potential target and pull its interface out, which is just sort of a good design thing to do.
+
+140
+00:21:55.890 --> 00:22:01.300
+Tim Kington: We still can't plug them directly into each other, because the methods in these 2 interfaces are not exactly the same.
+
+141
+00:22:03.110 --> 00:22:08.850
+Tim Kington: but our client is now loosely coupled to the target. It is not tied directly to a specific class.
+
+142
+00:22:11.070 --> 00:22:18.389
+Tim Kington: Now, there are 2 ways we could solve this problem. We could make our potential target implement this interface, which is the one the client knows how to use
+
+143
+00:22:18.580 --> 00:22:20.169
+Tim Kington: that would work.
+
+144
+00:22:20.390 --> 00:22:47.649
+Tim Kington: But what we're gonna wind up doing is sort of duplicating all the code that's in that class. We've already got methods in that class to go out and say, get new email messages, or mark a messages, read or download the body of a message or an attachment from a message. And we're gonna have to add new versions of those methods that are the ones the client expects. Because those are the ones it's used to. So we're gonna wind up with kind of 2 versions of each method. This is not a great way of attacking the problem.
+
+145
+00:22:48.400 --> 00:23:07.170
+Tim Kington: It's also not reusable. If we have multiple libraries, right? So if I was going to do that, actually, in my case, the other problem is, maybe you can't edit that code right. So I had an Imap library. That was a 3rd party library, and I had a Microsoft library. I can't change the source code inside of there. So this approach really won't work
+
+146
+00:23:07.360 --> 00:23:08.570
+Tim Kington: much of the time.
+
+147
+00:23:09.060 --> 00:23:11.220
+Tim Kington: The other way we can do this is with an adapter.
+
+148
+00:23:12.190 --> 00:23:14.529
+Tim Kington: So what we're going to do is write an adapter.
+
+149
+00:23:14.760 --> 00:23:18.280
+Tim Kington: and it will implement the interface that the client expects.
+
+150
+00:23:18.710 --> 00:23:32.999
+Tim Kington: and it will also hold onto an object that has the other interface that implements this other interface, and whenever the client makes a call in the target interface, the adapter will turn around and do the corresponding thing with this potential target.
+
+151
+00:23:33.350 --> 00:23:36.760
+Tim Kington: All right. So the client will say something like, Go get unread messages.
+
+152
+00:23:36.890 --> 00:23:47.309
+Tim Kington: and this adapter will turn around and call whatever the Microsoft version of that method is, get back the unread messages, convert them into the format. The client class expects and return the date
+
+153
+00:23:48.290 --> 00:23:57.589
+Tim Kington: alright, so the client can speak through the adapter to this potential target, basically a translator.
+
+154
+00:23:58.290 --> 00:24:10.379
+Tim Kington: So this is good because it's reusable. We have loose coupling, high cohesion, both things we want and a good design. The only downside is, we have an extra layer of indirection. And really, that's just not an issue in this kind of scenario.
+
+155
+00:24:13.080 --> 00:24:15.190
+Tim Kington: Let's look at an example of this
+
+156
+00:24:15.440 --> 00:24:33.740
+Tim Kington: if we wanted to adapt our we have 2 bank account classes account and bank account that both do the same thing, but they have slightly different interfaces, and we would like to be able to make the account object look like a bank account. We've already got client code that knows how to use the bank account.
+
+157
+00:24:33.890 --> 00:24:37.039
+Tim Kington: So we'd like to adapt to that interface.
+
+158
+00:24:38.660 --> 00:24:40.940
+Tim Kington: So here's our bank account interface.
+
+159
+00:24:41.160 --> 00:24:51.679
+Tim Kington: We can get and set a PIN. That's an int. Get and set the owner. That's a customer object. Get and set account. Id. That's an int deposit withdrawing. Get balance uses this money interface.
+
+160
+00:24:52.170 --> 00:24:59.719
+Tim Kington: and then we have our account interface, and you can see they're very similar. In fact, all of the methods in this case even have the same names.
+
+161
+00:24:59.890 --> 00:25:03.640
+Tim Kington: But the data types are a little different, right? The owner here is a string.
+
+162
+00:25:03.760 --> 00:25:07.159
+Tim Kington: The deposit withdraw and get balance is dealing with double here.
+
+163
+00:25:07.420 --> 00:25:14.950
+Tim Kington: Don't ever do that never store financial data in a double. Also this money interface. I don't know if you're familiar with it from 1 21 or
+
+164
+00:25:15.290 --> 00:25:17.420
+Tim Kington: I don't know. 5 11. I guess it is.
+
+165
+00:25:17.833 --> 00:25:25.119
+Tim Kington: That's also a thing that doesn't really make sense for financial data. You should be using big decimal if you're dealing with financial data.
+
+166
+00:25:26.120 --> 00:25:33.220
+Tim Kington: Anyway, these interfaces are basically the same. But some of the data types are different. So we need an adapter to translate between the 2.
+
+167
+00:25:33.840 --> 00:25:37.719
+Tim Kington: So in this case our adapter will implement the bank account interface.
+
+168
+00:25:37.900 --> 00:25:47.779
+Tim Kington: and it will hold on to an account object. And whenever we call a method in the bank account interface, it will turn around and call the corresponding method in the account interface.
+
+169
+00:25:49.270 --> 00:26:08.199
+Tim Kington: So here's our adapter. We're going to store an account object. It'll be given to us in the constructor. We remember it. Some of the methods we can just do as one liners, because the data types are already the same. So, Setpin, we'll just call set PIN on the account. Object. Get PIN same thing same for set account, Id, and get account
+
+170
+00:26:08.530 --> 00:26:11.450
+Tim Kington: right. These methods are just pass-through methods. Basically.
+
+171
+00:26:13.070 --> 00:26:27.539
+Tim Kington: some of the methods have to do a little work in set owner. We have to turn the customer object. We're given into a string, which is what the account interface expects. So it turns out the string it expects is the owner's 1st name, and then a space, and then the last name
+
+172
+00:26:28.050 --> 00:26:32.049
+Tim Kington: alright. So we can build those up in a string buffer and pass those into
+
+173
+00:26:32.300 --> 00:26:34.849
+Tim Kington: set owner on the account object.
+
+174
+00:26:35.140 --> 00:26:39.470
+Tim Kington: We're gonna ignore the fact that this is a terrible way of handling names and real software.
+
+175
+00:26:39.700 --> 00:26:46.620
+Tim Kington: Not everyone has 2 names. You can't just assume that. And this would never work in the real world, but it's just a toy exam.
+
+176
+00:26:47.530 --> 00:27:11.619
+Tim Kington: Get. Owner has to go in the opposite direction. So we need to take the string and turn it back into a customer object. So we'll create a new bank customer object. We'll get the owner from the account object and split it where the space is, and then the 1st token will be the 1st name, and the second token will be the last name, and it turns out we also need to set the id of the customer on the customer object. So we're going to call parent get account Id.
+
+177
+00:27:11.790 --> 00:27:19.739
+Tim Kington: and convert that into a string by adding an empty string to it. This is just sort of an idiom for converting into a string
+
+178
+00:27:21.330 --> 00:27:31.579
+Tim Kington: alright. So set owner turned our customer into a string and passed it into the account interface. Get owner gets the string from the account interface, turns it back into a customer object.
+
+179
+00:27:34.320 --> 00:27:39.320
+Tim Kington: and then for deposit, withdraw and get balance we need to convert between money and double.
+
+180
+00:27:39.540 --> 00:27:44.259
+Tim Kington: So here, if we're given money, we can turn it into a double by calling as double.
+
+181
+00:27:44.410 --> 00:28:01.340
+Tim Kington: and then we can call the corresponding method on the account interface withdraw, does the same thing, convert the money to a double and call parent withdraw, get balance, has to go in the opposite direction. So we get the double from the parent and we wrap it with a dollar object which implements the money interface.
+
+182
+00:28:04.060 --> 00:28:11.439
+Tim Kington: So basically simple translation back and forth between the data types. Here, are there questions.
+
+183
+00:28:11.890 --> 00:28:15.150
+Tim Kington: did you do something with the adapters in 5 11?
+
+184
+00:28:18.050 --> 00:28:19.690
+Tim Kington: Anybody take 5, 11.
+
+185
+00:28:21.000 --> 00:28:22.670
+Benjamin Morgan: I did. Yeah, we did a little bit.
+
+186
+00:28:23.420 --> 00:28:24.100
+Tim Kington: Okay.
+
+187
+00:28:27.010 --> 00:28:31.119
+Tim Kington: Alright. Then the set interface is the other thing we need to talk about tonight.
+
+188
+00:28:31.500 --> 00:28:33.819
+Tim Kington: A set is a collection.
+
+189
+00:28:34.870 --> 00:28:39.959
+Tim Kington: It works a lot like the collections you're familiar with you. I'm sure you're familiar with the ray list. At least.
+
+190
+00:28:41.550 --> 00:28:43.789
+Tim Kington: The key difference to a set is that
+
+191
+00:28:44.000 --> 00:28:47.970
+Tim Kington: a set only cares. If a thing is a member of the set or not.
+
+192
+00:28:48.140 --> 00:28:52.280
+Tim Kington: we don't care about the order of the objects in the set. There really is no defined order.
+
+193
+00:28:54.470 --> 00:29:05.700
+Tim Kington: and you can't have any duplicates in the set that doesn't really make sense right? Like, if it's the set of brown eyed students in the class. Either you have brown eyes or you don't, but you can't be in that group twice, right
+
+194
+00:29:06.176 --> 00:29:26.829
+Tim Kington: the main operations we perform on a set are, add, remove, contains, and then intersection and union. So intersection. We take 2 sets and find all the elements that are in both, and union we combine the 2 sets and take anything that's in either set. So intersection is basically an and operation and union is an or
+
+195
+00:29:30.080 --> 00:29:32.460
+Tim Kington: alright. So here's some set code.
+
+196
+00:29:32.690 --> 00:29:51.609
+Tim Kington: There are 2 set types in the Jdk. We'll get into the details of how they work later on in the semester. But for now you should think of a hash set as slightly more efficient and unordered, and the tree set will be a little bit slower. It's still extremely fast, but it keeps its elements in sorted order.
+
+197
+00:29:52.090 --> 00:30:06.239
+Tim Kington: So we create a hash set of strings. We can add Hello, and by to it we can add all the elements from one set to another. Here we're adding everything from S back into S, which will have no effect, because sets do not allow duplicates.
+
+198
+00:30:06.750 --> 00:30:15.830
+Tim Kington: Then we create a tree set, and we add 1, 2, 3 to it. Now we add everything from T into S. So now S also contains a string, 1, 2, 3.
+
+199
+00:30:16.880 --> 00:30:21.570
+Tim Kington: We can ask us if it contains everything that's in T. That will be true.
+
+200
+00:30:22.140 --> 00:30:28.809
+Tim Kington: We can ask T. If it contains everything in S, and that will be false. T only contains 1, 2, 3, and S has 3 strings.
+
+201
+00:30:29.630 --> 00:30:39.100
+Tim Kington: We can also ask about individual strings, so we can ask S. If it contains ace, or if it contains 1, 2, 3 ace obviously would be false, 1, 2, 3 will be true.
+
+202
+00:30:40.400 --> 00:30:49.380
+Tim Kington: The intersection operation is called retain all. So if we say S. Retain all T. What that means is delete everything from S. That is not also in T,
+
+203
+00:30:49.880 --> 00:30:53.659
+Tim Kington: so S. Will end up with only the elements that were in both sets.
+
+204
+00:30:54.920 --> 00:31:01.100
+Tim Kington: So if we do that we'll delete Hello, and by, and S will only contain 1, 2, 3,
+
+205
+00:31:01.320 --> 00:31:03.489
+Tim Kington: and so this will still print true.
+
+206
+00:31:03.730 --> 00:31:10.300
+Tim Kington: T. Retain all. S. Won't do anything at this point, because they both just contain the set 1, 2, 3, or the string, 1, 2, 3,
+
+207
+00:31:10.580 --> 00:31:14.290
+Tim Kington: and T does still contain 1, 2, 3, right?
+
+208
+00:31:15.200 --> 00:31:22.479
+Tim Kington: So pretty straightforward, basically retain all is the intersection operation. Add all is the union.
+
+209
+00:31:24.560 --> 00:31:27.030
+Tim Kington: And these are explained on the slides in detail.
+
+210
+00:31:30.770 --> 00:31:37.360
+Tim Kington: We were also asked to list the available set methods, their purposes, and their efficiencies.
+
+211
+00:31:38.010 --> 00:31:40.970
+Tim Kington: and if we are asked that 1st of all.
+
+212
+00:31:41.110 --> 00:31:47.150
+Tim Kington: the methods are the same as the collection class set. The set interface is defined pretty much like this.
+
+213
+00:31:47.310 --> 00:32:06.710
+Tim Kington: It's not quite like this anymore. It literally was defined like this for many versions of Java. Now, there are these default method things you can add to interfaces. So I think set has a few of those, but it was literally empty, just extending collection for a long time. The key difference here is the semantics, not the
+
+214
+00:32:06.880 --> 00:32:08.330
+Tim Kington: methods that are available.
+
+215
+00:32:08.660 --> 00:32:09.650
+Tim Kington: So
+
+216
+00:32:09.870 --> 00:32:14.900
+Tim Kington: if you have a method that takes a set, you know that you're getting a collection that won't accept duplicates
+
+217
+00:32:15.130 --> 00:32:16.860
+Tim Kington: and doesn't have an order.
+
+218
+00:32:17.930 --> 00:32:21.829
+Tim Kington: So the type mostly just exists to make code more readable.
+
+219
+00:32:24.570 --> 00:32:30.630
+Tim Kington: The efficiencies in your methods are dependent on the implementation. Most of the methods in the hash set are constant time.
+
+220
+00:32:31.000 --> 00:32:36.260
+Tim Kington: That's pretty amazing. Right? That means if you have a set with a hundred elements or a set with a billion elements.
+
+221
+00:32:36.380 --> 00:32:39.429
+Tim Kington: the methods are going to run in the same amount of time.
+
+222
+00:32:40.060 --> 00:32:53.949
+Tim Kington: and the tree set tend to be log. N, which is also absurdly fast. You really, in in real code, you're generally not going to notice the difference between log N and constant time. Log N is so fast it basically doesn't matter.
+
+223
+00:32:55.260 --> 00:33:01.600
+Tim Kington: You have to get up to like billions of elements before you start to care about login not being instantaneous.
+
+224
+00:33:03.750 --> 00:33:10.270
+Tim Kington: Alright, any questions adapter sets anything else material related.
+
+225
+00:33:10.900 --> 00:33:14.570
+Tim Kington: anything that's been bugging you from 5 11 that never quite clicked.
+
+226
+00:33:26.790 --> 00:33:27.850
+Tim Kington: All right.
+
+227
+00:33:27.950 --> 00:33:28.810
+Tim Kington: Well.
+
+228
+00:33:29.760 --> 00:33:39.010
+Tim Kington: let's talk about the tools we're going to be using this semester. So we're going to be using Github for our project assignments. You'll need to create an account there if you don't have one
+
+229
+00:33:39.960 --> 00:33:41.610
+Tim Kington: there are instructions.
+
+230
+00:33:41.780 --> 00:33:47.579
+Tim Kington: Once you post your username on the Ed thread. I will invite you to the Instruction project
+
+231
+00:33:47.900 --> 00:33:52.958
+Tim Kington: or the Instruction Repository on Github or all of the
+
+232
+00:33:53.600 --> 00:34:01.520
+Tim Kington: project assignments, and that will tell you how to create a repository for your code and then invite me to it.
+
+233
+00:34:02.060 --> 00:34:14.420
+Tim Kington: and once I've been invited I will push the starter code out into your repository. So a couple of people already did that their code, that code is already pushed into their repository. So they're ready to go.
+
+234
+00:34:14.530 --> 00:34:18.699
+Tim Kington: We'll be using Github to manage that.
+
+235
+00:34:19.610 --> 00:34:21.629
+Tim Kington: You have a choice about how you
+
+236
+00:34:21.820 --> 00:34:40.229
+Tim Kington: get your code back and forth between your Ide and Ed. It's possible to do all the assignments directly in Ed. I would not recommend it, because you won't have a real debugger, and you're probably gonna waste a lot of time trying to figure out test failures. It's much better to work with an ide. You'll be able to quickly run and execute tests there.
+
+237
+00:34:40.617 --> 00:34:46.499
+Tim Kington: And you'll be able to set breakpoints and step through code and see how things are working, which is much more important.
+
+238
+00:34:46.860 --> 00:34:50.150
+Tim Kington: It's a much more efficient way of debugging your code.
+
+239
+00:34:50.650 --> 00:35:18.889
+Tim Kington: So you can move code between your ide and Ed by copy and paste if you want, or just uploading files directly. Another way to do it is to really use. Get right. So you'll be cloning your Github repository into your machine so that you can work on the code. You'll be able to make changes, push the code changes back up to Github and then pull them down into Ed at the terminal there. And there are instructions for all of this stuff in the Github repo with all the instructions.
+
+240
+00:35:19.290 --> 00:35:23.540
+Tim Kington: So that's another thing you may wind up using github, for
+
+241
+00:35:24.630 --> 00:35:38.099
+Tim Kington: github is well git get is used by every professional development environment I am aware of. Now, I don't know anybody who is using anything else anymore unless they're working on ancient legacy software.
+
+242
+00:35:38.290 --> 00:35:42.349
+Tim Kington: It really is the best tool and has just one.
+
+243
+00:35:42.580 --> 00:35:44.329
+Tim Kington: the entire market at this point
+
+244
+00:35:45.664 --> 00:35:49.755
+Tim Kington: we'll be using clips or Vs code. I've switched over to Vs code.
+
+245
+00:35:50.490 --> 00:35:55.990
+Tim Kington: more recently, eclipse is the official software that Franklin recommends.
+
+246
+00:35:56.090 --> 00:36:03.023
+Tim Kington: and that's fine. If you use eclipse, it works great. I you know I can help you if you run into problems most of the time.
+
+247
+00:36:03.540 --> 00:36:09.370
+Tim Kington: Vs code is also very nice, and the project starter code will work in either tool.
+
+248
+00:36:10.145 --> 00:36:15.179
+Tim Kington: It's set up for both. There are instructions and the instructions repository about how to use both of them.
+
+249
+00:36:17.190 --> 00:36:32.310
+Tim Kington: And there is also a video in the week one folder this week. So there is a link in the large introductory post on Ed that will take you to my dropbox, which is where the slides are. And there's also a video in week, one that shows you how to use eclipse. So
+
+250
+00:36:32.310 --> 00:36:49.500
+Tim Kington: there are examples of writing unit tests running your unit tests, setting breakpoints, stepping through code doing lots of stuff like that. So make sure you watch that video. If you're going to be using eclipse. If you're using Vs code, I have not made a video like that. The documentation for video for Vs code is pretty fantastic, though.
+
+251
+00:36:49.560 --> 00:36:52.319
+Tim Kington: So if you go out to Microsoft site and look up the Java
+
+252
+00:36:52.701 --> 00:37:01.429
+Tim Kington: I forget what they call it. It's like a extension pack, Java extension pack or something like that. There's a lot of documentation about how to use that
+
+253
+00:37:01.860 --> 00:37:05.480
+Tim Kington: can go. Read that, and then, Ed.
+
+254
+00:37:06.040 --> 00:37:13.480
+Tim Kington: we will be using as well. I can show you that one get a tab going here.
+
+255
+00:37:16.400 --> 00:37:17.830
+Tim Kington: Okay?
+
+256
+00:37:24.240 --> 00:37:32.879
+Tim Kington: So the 1st thing is, when you're in Ed. There they put the discussion boards right in your face. But it's not obvious that you can go to these lessons over here. So click on the
+
+257
+00:37:33.070 --> 00:37:42.090
+Tim Kington: person with the book, and that will take you to the lessons. Page. This is where all the due dates are okay. These are the real due dates. The ones in canvas may or may not be accurate. I think
+
+258
+00:37:42.250 --> 00:37:45.549
+Tim Kington: I think this semester they got lucky, and they happened to be right
+
+259
+00:37:46.200 --> 00:38:04.689
+Tim Kington: each week. You'll see exercises. These are for you to practice and are not graded. They are a more involved version of what we do in the homework. So the homework is a little easier. The exercises are a bit more challenging. They're a great way to practice for exams, or just to increase the depth of your knowledge. Get a little more practice.
+
+260
+00:38:06.140 --> 00:38:30.029
+Tim Kington: each week. We'll have different problems. Usually we have some coding problems, and then we'll have a quiz. That is non coding. And you can see we've got the code here. If you don't see multiple files here. You can click on the file list, and that's where you'll see the rest of the files. Here's the adapter pattern problem we're going to be doing this week. So we need to implement an adapter which adapts one interface to another.
+
+261
+00:38:30.170 --> 00:38:32.869
+Tim Kington: and you have some starter code here
+
+262
+00:38:33.440 --> 00:38:45.188
+Tim Kington: you can click run which will run your main method. So here you can see we've got a main method so you could put some code in here and some print statements and test some things that way.
+
+263
+00:38:45.970 --> 00:38:53.520
+Tim Kington: in the project assignments. They're set up to run. J unit tests in the homeworks. It's set up to run run a main method because you don't really need
+
+264
+00:38:53.660 --> 00:38:57.490
+Tim Kington: full J unit testing for the homework assignments.
+
+265
+00:38:57.590 --> 00:39:14.559
+Tim Kington: And then if you click mark, that's gonna run my tests, and it also submits the code so that I can grade it right? So each time you submit, Mark, that's sort of like submitting the code, you can do that as many times as you want. There's no penalty for some huge number of submissions. I'm only going to grade the last one. So
+
+266
+00:39:16.540 --> 00:39:19.100
+Tim Kington: just get as many points as you can.
+
+267
+00:39:20.208 --> 00:39:23.790
+Tim Kington: Right now we have a compile error because the adapter
+
+268
+00:39:23.940 --> 00:39:28.570
+Tim Kington: does not implement. I student. It's saying the adapter can't be converted to I student.
+
+269
+00:39:28.790 --> 00:39:32.039
+Tim Kington: So one thing we need to do is say, implements.
+
+270
+00:39:34.540 --> 00:39:39.150
+Tim Kington: Okay, I should have just let it fill it in for me there. I see.
+
+271
+00:39:39.770 --> 00:40:00.559
+Tim Kington: And now, if we click mark, at least it should compile. Okay. So now we can see the tests. The names of the tests are giving you some clues. You can see how many points they're worth here. Typically, you should solve the test from top to bottom. It's not too important in the homework, but in the project assignments that will guide you on the path of least resistance. I guess I'd say
+
+272
+00:40:01.780 --> 00:40:17.289
+Tim Kington: keep in mind that the name of the test is a clue. You can also hit, show, stack, trace, and you can sometimes learn something about what's going on from the stack trace. You know, if this is happening in your code, that it explodes, then you'll be able to see what line of code is failing.
+
+273
+00:40:19.670 --> 00:40:39.800
+Tim Kington: Let's see, what else do I have to say about Ed? There's not much here. The editor is not bad, but it's really nice to have a real debugger. I really would suggest that you become familiar with an ide and get used to that. That's what you're going to be using once you're out of school, anyway. So might as well bite the bullet. Now learn how to use the debugger and and start to get good at that.
+
+274
+00:40:41.340 --> 00:40:45.140
+Tim Kington: I think that's all I had to say about that.
+
+275
+00:40:49.270 --> 00:40:51.789
+Tim Kington: Is there anything else here?
+
+276
+00:40:54.500 --> 00:40:58.669
+Tim Kington: Oh, yeah. There was also the quiz part of that homework, right? So there are some
+
+277
+00:40:58.840 --> 00:41:21.320
+Tim Kington: questions you can answer in the quiz most of the quiz questions are going to be auto graded. So when you click, submit, and it says it's incorrect, it is, in fact, incorrect, right? Because it's auto graded. You're not going to be writing like English text, because then it wouldn't be auto graded. So answer the question in the way it tells you to, and you can keep clicking.
+
+278
+00:41:21.720 --> 00:41:24.379
+Tim Kington: Submit until it tells you you are correct. So
+
+279
+00:41:24.940 --> 00:41:27.250
+Tim Kington: so you should be able to get those right?
+
+280
+00:41:30.000 --> 00:41:38.790
+Tim Kington: we have 2 coding questions this week. One, you're gonna write an adapter, and the other one is about using your own custom class with a hash set.
+
+281
+00:41:38.960 --> 00:41:58.539
+Tim Kington: And part of that question is kind of doing some research. So you need to go out and read about it has a hint about reading about hash sets or hash code and equals, and reading about the contract between those 2 methods. So go read about that, and then figure out how to make your class work correctly with the hash set
+
+282
+00:42:01.240 --> 00:42:03.280
+Tim Kington: alright. What questions do we have.
+
+283
+00:42:10.550 --> 00:42:17.829
+Benjamin Morgan: I had a question about the Vs code with that extension. Is that the only thing that we have to add to Vs code
+
+284
+00:42:18.380 --> 00:42:24.870
+Benjamin Morgan: to get it functioning? Or do we have to install, like the whole jdk on our system separately?
+
+285
+00:42:25.520 --> 00:42:30.199
+Tim Kington: I think if you install the Java extension pack it will install a Jdk.
+
+286
+00:42:30.340 --> 00:42:33.450
+Tim Kington: I don't remember, for sure it might.
+
+287
+00:42:33.760 --> 00:42:52.310
+Tim Kington: It might prompt you to install the Jdk when you install the extension pack. There's a really nice like welcome page that has a checklist, and it's like teaching you how to use the extension, and if you need to install a Jdk, that'll be like the 1st step, it'll be like. Point us to your Jdk. Install one and tell us what directory it's in.
+
+288
+00:42:52.430 --> 00:42:57.490
+Tim Kington: So I don't remember if I had to do that, but if I did, it was, you know, pretty obvious what you needed to do.
+
+289
+00:42:58.200 --> 00:42:59.300
+Benjamin Morgan: Okay. Thanks.
+
+290
+00:43:00.430 --> 00:43:01.290
+Tim Kington: Welcome.
+
+291
+00:43:02.130 --> 00:43:16.469
+Tim Kington: Yeah, I've converted to Vs code, because now I can run all my languages there and use the same set of key commands and all that, and it's pretty lightweight. Eclipse is much heavier weight than Vs code, you know. Opening a new window vs. Code is pretty quick
+
+292
+00:43:16.660 --> 00:43:31.349
+Tim Kington: running the debugger, and things like that is pretty snappy, especially. It's the Java tools have very good performance there. So I like I like the tool a lot. And also, it's, you know, being improved much more quickly than eclipses lately.
+
+293
+00:43:35.354 --> 00:43:39.599
+Tim Kington: There was something I was about to check. Yes, so
+
+294
+00:43:41.130 --> 00:43:45.179
+Tim Kington: it looks like I almost forgot to do something very important.
+
+295
+00:43:45.530 --> 00:43:46.870
+Tim Kington: Okay, wow.
+
+296
+00:43:47.000 --> 00:43:51.630
+Tim Kington: So there are going to be videos each week about the Vm project.
+
+297
+00:43:52.000 --> 00:43:57.909
+Tim Kington: But it looks like the 1st one I'm supposed to introduce live here. So I should do that
+
+298
+00:44:00.480 --> 00:44:04.658
+Tim Kington: the moment I have to get logged into Github here, and I
+
+299
+00:44:05.920 --> 00:44:08.120
+Tim Kington: wasn't logged in on this machine.
+
+300
+00:44:09.140 --> 00:44:10.329
+Tim Kington: Just give me a second.
+
+301
+00:44:40.910 --> 00:44:42.090
+Tim Kington: Alright.
+
+302
+00:44:43.560 --> 00:44:45.619
+Tim Kington: Okay, I got there.
+
+303
+00:44:46.770 --> 00:44:52.390
+Tim Kington: So here is the instruction project that I will be inviting you to.
+
+304
+00:44:53.047 --> 00:45:00.119
+Tim Kington: You've got a bunch of setup stuff here at the beginning, and then we've got the description of each part of the assignment.
+
+305
+00:45:00.500 --> 00:45:05.989
+Tim Kington: So we've got setting up your system which talks about eclipse or Vs code and tells you to do some things.
+
+306
+00:45:06.561 --> 00:45:19.629
+Tim Kington: There's a an auto updater that I built, so that when you're ready for a new assignment. You can get the starter code for the next week. So when you're done with a part, and you've submitted on Ed, and you've gotten as many points as you're gonna get.
+
+307
+00:45:19.780 --> 00:45:23.800
+Tim Kington: You can add a tag to your Github repository
+
+308
+00:45:23.940 --> 00:45:43.170
+Tim Kington: and then push that tag. So basically, here, if you did a get tag ready for Part 3, that's what you would do when you're done with Part 2. Please don't do this right now in the test. You'll skip the 1st 2 weeks of the assignment. So you know, if you're done with part one, you do a get tag ready for part 2, and then you push it to the origin.
+
+309
+00:45:43.240 --> 00:46:03.019
+Tim Kington: and my auto updater will see that within about 5Â min, and then it will push the new starter code into your repository automatically. So you will see it appear on your main branch. You should do your work on a branch because my updater is going to stomp your main branch whenever you ask for a new part. So if you want to keep your code around
+
+310
+00:46:03.120 --> 00:46:06.229
+Tim Kington: in that Github Repo, you should do it on a branch.
+
+311
+00:46:06.640 --> 00:46:18.119
+Tim Kington: So there's your setup instructions. We've got instructions for pulling the project into eclipse. There's really nothing to do. If you're in Vs. Code. You just open the folder and it'll work
+
+312
+00:46:18.783 --> 00:46:33.270
+Tim Kington: some tips on working with get and eclipse again. There are not equivalent docs for Vs code. But if you look at the docs for the Java extensions or for the git functionality in Vs code Microsoft already has excellent documentation
+
+313
+00:46:33.380 --> 00:46:58.959
+Tim Kington: and then submitting your code in Ed. If you want to pull the code from Github into Ed, you can follow these instructions. This will pull the code into your Ed environment, and then you can click the Mark button and see how many tests are passing. And then there's some other information here about. If we wanted to do some commits and push code changes back from Ed into Github. Then you could pull them back into your ide and continue to work on the code.
+
+314
+00:46:59.660 --> 00:47:01.779
+Tim Kington: So that's all described here.
+
+315
+00:47:03.640 --> 00:47:08.430
+Tim Kington: And then we've got the instructions for part one. So let's take a look at this.
+
+316
+00:47:10.310 --> 00:47:15.679
+Tim Kington: I could make this bigger, maybe not all right.
+
+317
+00:47:16.450 --> 00:47:17.270
+Tim Kington: So
+
+318
+00:47:17.400 --> 00:47:33.830
+Tim Kington: we would like to learn how to use get. And we also want to get some experience working on larger coding projects. There's really no way to get a feel for working on larger bodies of code than there is by doing it. It's really the only thing to do. So we're going to do that. You really haven't done that up to this point
+
+319
+00:47:33.940 --> 00:47:38.520
+Tim Kington: the, you know, projects in 5 11, I guess, sort of build on each other. But
+
+320
+00:47:38.941 --> 00:47:50.689
+Tim Kington: this is a much more realistic project size. By the end of this we'll have maybe a hundred classes in our project, and quite a bit of code that all fits together and does a bunch of useful things.
+
+321
+00:47:51.730 --> 00:48:01.849
+Tim Kington: So we're going to build a simplified version of the Java Vm, and we'll build some pieces of a compiler, really, basically a Java compiler that compiles the code for our Vm.
+
+322
+00:48:02.400 --> 00:48:14.810
+Tim Kington: we're going to be using git, you can use git to keep track of your code changes. Take snapshots, and if you don't know about git, go here and read sections 1.1 to 1.3
+
+323
+00:48:14.920 --> 00:48:16.760
+Tim Kington: over the course of the semester.
+
+324
+00:48:17.140 --> 00:48:35.060
+Tim Kington: We're going to build a compiler in a virtual machine. So this week we're going to build a simple execution engine that can run a few of the OP. Codes we will need in our programs. So when you compile a Java program that creates a list of virtual machine operations, your program will execute these while keeping track of the values of the variables in the program.
+
+325
+00:48:35.290 --> 00:48:59.820
+Tim Kington: So below, we have some examples of Java code with the corresponding Vm code. The examples are intended to give you a feel for what the Vm. Code is doing. We are not going to be translating Java into Vm. Codes this week. All right. So in Java we might write, X equals 5 plus 7 in our virtual machine, we would say, load the constant 5, load the constant 7. Add and then store the result into local X,
+
+326
+00:48:59.990 --> 00:49:09.839
+Tim Kington: all right. Y equals x minus 3. We would load the local X load the constant 3, subtract and then store the local store, the data, the result into local Y,
+
+327
+00:49:10.080 --> 00:49:17.550
+Tim Kington: right? So our virtual machine is using a stack to perform its calculations. Load Const is pushing an an integer onto the stack.
+
+328
+00:49:17.740 --> 00:49:25.980
+Tim Kington: Our arithmetic operations will always take 2 values off the top of the stack, apply the operation, and put the result back on the stack.
+
+329
+00:49:26.130 --> 00:49:40.535
+Tim Kington: so add is going to remove 5 and 7 from the stack. Add them together, and put 12 on top of the stack, and then the store local command will take the top value off the stack and store it in the variable that we tell it to use.
+
+330
+00:49:42.670 --> 00:49:46.509
+Tim Kington: we could write a more complicated example. So here's 1 with a loop.
+
+331
+00:49:47.070 --> 00:49:49.329
+Tim Kington: And then here is the equivalent
+
+332
+00:49:49.660 --> 00:50:00.929
+Tim Kington: Vm code for it. Right? You can work through this and think about it. On your own time. We've got some comments in here showing which lines were translated into which pieces of Vm. Code.
+
+333
+00:50:01.509 --> 00:50:08.850
+Tim Kington: We have some new instructions in here. We've got to compare less than so that's gonna take 2 values off the stack.
+
+334
+00:50:09.010 --> 00:50:19.010
+Tim Kington: See if the 1st one is less than the second, and if so, it will push true onto the stack, which is a 1. If it was not less, it will push a 0, which means false.
+
+335
+00:50:19.350 --> 00:50:36.920
+Tim Kington: And then we've got this branch F. This is a branch instruction that will only branch at the top of the stack is false. So it's going to pop a value off the stack, and if that value is 0, it's going to jump to line 23 here, so that would jump down. 23 is actually the end of the program, right? Our line numbers only go up to 22.
+
+336
+00:50:37.040 --> 00:50:44.019
+Tim Kington: So that's basically how this while loop ends. When I is not less than 10 anymore, we will exit the loop. We'll jump down to the end.
+
+337
+00:50:44.735 --> 00:50:56.779
+Tim Kington: We also have a MoD operation that's doing modules division, we have a compare equal. This will take 2 values off the stack and compare them, and if they're equal, it pushes true. Otherwise it pushes false
+
+338
+00:50:58.610 --> 00:51:01.790
+Tim Kington: And then we've got this branch instruction, which just
+
+339
+00:51:02.040 --> 00:51:09.350
+Tim Kington: unconditionally jumps to a destination. So whenever we hit this line we will always jump to line 4. So we go back to the beginning of the loop.
+
+340
+00:51:09.550 --> 00:51:22.139
+Tim Kington: That's how our loop works. Right? This jump always takes us back to the beginning. We reevaluate the condition. If the condition is false, we're going to jump out of the loop, otherwise we'll go through the body and execute the body again.
+
+341
+00:51:24.130 --> 00:51:29.170
+Tim Kington: So for this assignment we need to implement about 15 OP. Codes.
+
+342
+00:51:29.310 --> 00:51:40.029
+Tim Kington: We've got load constant, which puts a constant on the stack load. Local will push the value of a local variable on the stack store. Local takes a value off the stack and stores it in a local variable.
+
+343
+00:51:40.310 --> 00:51:45.889
+Tim Kington: We've got 5 arithmetic opcodes, add, subtract, multiply, divide, and modulus.
+
+344
+00:51:46.030 --> 00:51:51.809
+Tim Kington: We've got 6. Compare OP. Codes equal, not equal, less than less than or equal, greater than greater than or equal.
+
+345
+00:51:53.490 --> 00:52:04.249
+Tim Kington: All of the arithmetic and compare OP. Codes will be handled in a single class. Binary, OP. It holds an operator, and the operator class is partially written for you, so make sure you take advantage of that.
+
+346
+00:52:04.910 --> 00:52:16.520
+Tim Kington: We have some branch OP. Codes branch always branches to the destination branch. T takes a value off the stack and only branches. If it's true, Branch F pops a value off the stack and only branches. If it's false.
+
+347
+00:52:18.370 --> 00:52:28.539
+Tim Kington: we have an opcode interface. All of your OP. Codes will implement this interface. That means the execution engine doesn't care about specific OP. Codes because they all have this execute method
+
+348
+00:52:29.422 --> 00:52:41.400
+Tim Kington: each opcode is given the current program counter, which is basically the line number we're on in the program. We're given the stack of integers. This is the stack that all the operations are manipulating. And we're given a map
+
+349
+00:52:41.530 --> 00:52:48.010
+Tim Kington: that holds our local variables. So it's a map where the string is the name of the variable, and the integer that goes with it is the value.
+
+350
+00:52:48.720 --> 00:52:53.530
+Tim Kington: right? So each opcode can get its work done using these pieces of data.
+
+351
+00:52:55.020 --> 00:52:57.680
+Tim Kington: This is an example of the command pattern.
+
+352
+00:52:58.880 --> 00:53:04.349
+Tim Kington: If you were writing this code in a production environment, you'd want to put error handling and good error messages in the code.
+
+353
+00:53:04.380 --> 00:53:32.159
+Tim Kington: We're gonna have a lot of code to write this semester even without trying to handle bad input in general, we're always going to assume that the code we're given is correct. And we're not going to spend any time writing extra code to try to handle bad input so like programs that are invalid, you know. Maybe we try to add 2 things together before we push 2 things on the stack. You don't need to worry about that. All of the programs I supply you with in my tests will be valid programs that work as long as your execution engine works correctly
+
+354
+00:53:33.090 --> 00:53:43.639
+Tim Kington: near the end of the semester. We'll add some type checking, and then we'll be putting in some bad code to see what happens. But until then just assume that everything you're given is correct code.
+
+355
+00:53:44.100 --> 00:53:53.179
+Tim Kington: We also need to implement the Vm thread class, which is our main execution engine. We will call the run method. Basically, the constructor is given a list of opcodes.
+
+356
+00:53:53.370 --> 00:53:58.730
+Tim Kington: And then, when I call the run method, it should execute all of those OP. Codes basically run the program.
+
+357
+00:53:58.870 --> 00:54:01.300
+Tim Kington: and then it returns the local variables
+
+358
+00:54:01.460 --> 00:54:04.770
+Tim Kington: as they stood at the end of the program's execution.
+
+359
+00:54:05.180 --> 00:54:09.780
+Tim Kington: Right? So this is the main interface I'm gonna be using to test your code.
+
+360
+00:54:10.135 --> 00:54:38.360
+Tim Kington: You'll want to take a test driven. Approach this semester. This is a big project, and if you try to think about the whole thing at once, you won't be able to hold it in your head, and you won't be able to get anywhere. So what you want to do is write small tests that are going to test a small piece of functionality and then go write enough code to pass that test and then write a slightly more difficult test and write enough code to pass that test. And so, okay, so here, test cons, this is our 1st test. And I think this is already in the starter code for you.
+
+361
+00:54:38.849 --> 00:54:55.019
+Tim Kington: We have this nice testutil dot test code function that will take a string version of our program and turn it into a list of opcodes and then create a Vm thread and tell it to execute the OP. Code. So it does everything in one line, basically, and then it gives us back the local variables at the end.
+
+362
+00:54:55.170 --> 00:55:06.179
+Tim Kington: Alright. So we're gonna say, test this code. Load the constant 42, store it in the local a, and then we should, if we call Vars dot, get a, we should get the value 42
+
+363
+00:55:07.770 --> 00:55:20.540
+Tim Kington: alright. So to get this test to pass, you would need to implement the Vm thread constructor which this test code method is going to give you your opcodes. It'll turn the string into actual opcode objects and give them to you.
+
+364
+00:55:20.840 --> 00:55:25.679
+Tim Kington: You need to implement run, which will actually execute the OP. Codes that you have in your list.
+
+365
+00:55:26.320 --> 00:55:42.960
+Tim Kington: and then you need to execute. You need to implement the load constant code and the store local OP code for this program to work right? So you can get by just implementing those pieces. And then this test will pass, and then you write another test that maybe uses a couple more OP codes, and then you go. Make those work.
+
+366
+00:55:43.100 --> 00:55:45.489
+Tim Kington: keep going back and forth like that.
+
+367
+00:55:46.930 --> 00:55:48.559
+Tim Kington: All right. That's a lot to absorb.
+
+368
+00:55:48.680 --> 00:55:50.430
+Tim Kington: I'm sure you didn't absorb it all.
+
+369
+00:55:50.630 --> 00:55:56.290
+Tim Kington: Once you give me your github usernames, you will be invited to this repo. So you can read these instructions yourself.
+
+370
+00:55:56.792 --> 00:56:02.240
+Tim Kington: Keep in mind this video is recorded. The best way to do these is to watch the video.
+
+371
+00:56:02.530 --> 00:56:05.970
+Tim Kington: read the instructions, go work on the problem for an hour or 2,
+
+372
+00:56:06.070 --> 00:56:08.789
+Tim Kington: and then come back and watch this video again.
+
+373
+00:56:08.970 --> 00:56:13.999
+Tim Kington: because the stuff, I tell you here now doesn't sink in. You don't understand the problem well enough.
+
+374
+00:56:14.160 --> 00:56:17.179
+Tim Kington: When you come back the second time it will be much more helpful.
+
+375
+00:56:17.750 --> 00:56:20.249
+Tim Kington: Remember that that is available for you.
+
+376
+00:56:22.630 --> 00:56:24.859
+Tim Kington: What questions do we have at this point?
+
+377
+00:56:35.400 --> 00:56:37.280
+Tim Kington: Are you all terrified right now?
+
+378
+00:56:39.686 --> 00:56:42.783
+Sela Zoumanigui: Hi, sir! Yes, I'm here.
+
+379
+00:56:45.000 --> 00:56:55.850
+Sela Zoumanigui: I I am new to. I'm kind of little new to all this, and it is a lot to absorb. But
+
+380
+00:56:56.768 --> 00:57:05.910
+Sela Zoumanigui: my question is, I guess, for the github like the assignment you said that
+
+381
+00:57:06.210 --> 00:57:12.719
+Sela Zoumanigui: I will get an invite to my account so that I can get the starter code right.
+
+382
+00:57:13.790 --> 00:57:16.000
+Tim Kington: Yes, you can get into these instructions.
+
+383
+00:57:16.000 --> 00:57:16.400
+Sela Zoumanigui: Okay.
+
+384
+00:57:16.400 --> 00:57:18.699
+Tim Kington: And then the instructions tell you.
+
+385
+00:57:19.599 --> 00:57:23.669
+Tim Kington: how to get the starter code. So this setting up your system
+
+386
+00:57:24.780 --> 00:57:29.400
+Tim Kington: talks about creating a repository. Basically, if you follow these steps.
+
+387
+00:57:29.510 --> 00:57:46.949
+Tim Kington: then you'll send me an invitation to your project. So you go in, Ed, you post your github username. I will invite you to this repository that has all the instructions, and then you read these instructions and follow them, and that will. You'll create a project, and I will send you the starter code that way.
+
+388
+00:57:46.950 --> 00:57:52.239
+Sela Zoumanigui: Okay, thank you. I already have a company on on it.
+
+389
+00:57:53.810 --> 00:57:56.100
+Tim Kington: Pardon me, you posted it.
+
+390
+00:57:56.100 --> 00:57:57.080
+Sela Zoumanigui: Yes, yes.
+
+391
+00:57:57.080 --> 00:57:57.740
+Tim Kington: Okay.
+
+392
+00:57:58.030 --> 00:58:02.369
+Tim Kington: Alright. Well, if I haven't invited you already to this repo, I will very soon.
+
+393
+00:58:02.520 --> 00:58:03.810
+Sela Zoumanigui: Okay. Thank you, sir.
+
+394
+00:58:04.160 --> 00:58:04.850
+Tim Kington: You're welcome
+
+395
+00:58:05.623 --> 00:58:13.650
+Tim Kington: keep in mind. You have 2 weeks for this 1st project assignment. I would not waste those. I would get going on this right away, because, you know, it's new tools and new
+
+396
+00:58:13.760 --> 00:58:17.019
+Tim Kington: new things. If you get done a little early, that's fine, right?
+
+397
+00:58:17.548 --> 00:58:21.600
+Tim Kington: Better to get started early than to get started too late.
+
+398
+00:58:24.240 --> 00:58:28.819
+Tim Kington: Also, if you create your repository and invite me, and the code doesn't show up
+
+399
+00:58:29.474 --> 00:58:43.949
+Tim Kington: you know, within half a day or something the 1st time I have to do it manually. I have to add your repository to the list of repositories I'm tracking. But if that doesn't happen pretty quickly, certainly within 24Â h, let me know.
+
+400
+00:58:44.343 --> 00:58:47.540
+Tim Kington: You'll want to get that out of the way in the next day or 2.
+
+401
+00:58:47.820 --> 00:59:04.679
+Tim Kington: Also, I've invited anyone that's been invited to the instructions and hasn't accepted the invite. Those invites will expire after a week, and that's just a pain, because then you have to ask again, and I have to send the invite again, and it'll be a delay. So make sure you accept that invite before it expires.
+
+402
+00:59:07.790 --> 00:59:09.529
+Johnny Jones: Any other questions right now.
+
+403
+00:59:10.200 --> 00:59:15.650
+Johnny Jones: Is there anything in the instructions that says how to pull the code from Ed
+
+404
+00:59:16.040 --> 00:59:18.179
+Johnny Jones: into your github like for the homework.
+
+405
+00:59:22.820 --> 00:59:25.379
+Johnny Jones: Do you mean how to get it from Github into Ed?
+
+406
+00:59:26.170 --> 00:59:30.520
+Johnny Jones: No, the other way like you have in Ed.
+
+407
+00:59:31.310 --> 00:59:38.760
+Johnny Jones: So you said, it's better to not work in. Ed started to work, and an ide.
+
+408
+00:59:39.290 --> 00:59:43.869
+Tim Kington: Yeah. So the code starts out in Github. When I give you the starter code, it's in Github.
+
+409
+00:59:44.260 --> 00:59:49.849
+Tim Kington: So if you're gonna work in an ide. What you really want is to pull the code from Github into your ide
+
+410
+00:59:50.630 --> 00:59:54.270
+Tim Kington: there are instructions here about how to do that with eclipse.
+
+411
+00:59:54.680 --> 01:00:02.440
+Tim Kington: And so this is showing you how to get the code from Github into eclipse. Vs code has good docs about how to do that.
+
+412
+01:00:02.590 --> 01:00:04.500
+Tim Kington: Mvs code.
+
+413
+01:00:06.280 --> 01:00:06.870
+Johnny Jones: I know that.
+
+414
+01:00:06.870 --> 01:00:07.280
+Tim Kington: So.
+
+415
+01:00:07.280 --> 01:00:09.659
+Johnny Jones: Project. But what about the homework.
+
+416
+01:00:11.620 --> 01:00:21.610
+Tim Kington: The homework I would recommend doing on it. That's that's much more viable, and the homework's pretty small. So if you wanted to pull it into an ide you could just copy and paste the code.
+
+417
+01:00:23.990 --> 01:00:32.000
+Tim Kington: The homework generally is much, much smaller. I think you can also download the whole homework assignment.
+
+418
+01:00:33.320 --> 01:00:35.330
+Tim Kington: Probably. Let's see.
+
+419
+01:00:35.820 --> 01:00:48.899
+Tim Kington: what if I wanted to like yeah, download all. So if you wanted to pull it into your Id, you could do a download all and stick it in a folder somewhere, and then open that up in your Id. But I wouldn't recommend using Github with the homework assignments.
+
+420
+01:00:50.890 --> 01:00:51.370
+Tim Kington: Appreciate it.
+
+421
+01:00:51.370 --> 01:00:57.980
+Tim Kington: We're not going to be tracking those over time, or, you know, having those go from week to week. It's just the project assignments that'll be like that.
+
+422
+01:01:05.800 --> 01:01:09.380
+Tim Kington: Alright. Well, everyone have a good week. Oh, go ahead.
+
+423
+01:01:09.380 --> 01:01:16.812
+Kenneth Chiang: Oh, so just wanna double check. So are the homework and project assignments due on the dates that they say on the
+
+424
+01:01:17.950 --> 01:01:20.675
+Kenneth Chiang: And what is it?
+
+425
+01:01:21.950 --> 01:01:25.099
+Tim Kington: They're doing these these dates. I don't. I'm not sure I can't.
+
+426
+01:01:25.100 --> 01:01:25.550
+Kenneth Chiang: Oh!
+
+427
+01:01:25.550 --> 01:01:33.159
+Tim Kington: Yeah, the dates on Ed here are shown. This is where you're going to do the work and where you're gonna submit it. And this is where the dates are.
+
+428
+01:01:33.720 --> 01:01:34.510
+Kenneth Chiang: Okay.
+
+429
+01:01:40.880 --> 01:01:42.070
+Tim Kington: Anything else.
+
+430
+01:01:47.260 --> 01:01:49.289
+Tim Kington: All right. Well, get your tools set up.
+
+431
+01:01:49.420 --> 01:02:00.869
+Tim Kington: Give me your github, pat username, and make sure you've got that starter code there. So you're ready to go for the project that one's not due until a week from Sunday, but might as well get, you know.
+
+432
+01:02:01.070 --> 01:02:02.739
+Tim Kington: get that rolling.
+
+433
+01:02:03.250 --> 01:02:06.560
+Tim Kington: Everyone have a good week, and I'll see you back here next Thursday.
+
+434
+01:02:09.120 --> 01:02:10.050
+Tim Kington: Good night.
+
+435
+01:02:11.240 --> 01:02:11.940
+Thomas Stein: Thank you.
+
+436
+01:02:11.940 --> 01:02:12.790
+Sela Zoumanigui: Thank you.
